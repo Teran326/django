@@ -3,6 +3,10 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.urls import reverse
 
 
+def poster_path(instance, filename):
+    return "film/" + str(instance.id) + "/poster/" + filename
+
+
 def attachment_path(instance, filename):
     return "film/" + str(instance.film.id) + "/attachments/" + filename
 
@@ -29,6 +33,7 @@ class Film(models.Model):
                                   verbose_name="Runtime")
     rate = models.FloatField(default=5.0, validators=[MinValueValidator(1.0), MaxValueValidator(10.0)], null=True,
                              help_text="Please enter an float value (range 1.0 -10.0)", verbose_name="Rate")
+    poster = models.ImageField(upload_to=poster_path, blank=True, null=True, verbose_name="Poster")
     genres = models.ManyToManyField(Genre, help_text='Select a genre for this film')
 
     class Meta:
